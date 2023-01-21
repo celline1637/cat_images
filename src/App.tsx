@@ -1,7 +1,7 @@
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import CatViewer from "./CatViewer";
-import WorkingHours from "./WorkingHours";
-import "./App.css";
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import CatViewer from './pages/CatViewer';
+import WorkingHours from './pages/WorkingHours';
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
       <div className="App">
         <nav
           style={{
-            position: "fixed",
+            position: 'fixed',
             top: 0,
             left: 0,
           }}

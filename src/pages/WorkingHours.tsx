@@ -1,3 +1,5 @@
+import React from 'react';
+
 function WorkingHours() {
   return <div>2번 과제 - WorkingHours</div>;
 }
