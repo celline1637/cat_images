@@ -1,18 +1,8 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
-      "@/apis/*": ["./apis/*"],
-      "@/components/*": ["./components/*"],
-      "@/config/*": ["./config/*"],
-      "@/hooks/*": ["./hooks/*"],
-      "@/images/*": ["./images/*"],
-      "@/lib/*": ["./lib/*"],
-      "@/pages/*": ["./pages/*"],
-      "@/redux/*": ["./redux/*"],
-      "@/theme/*": ["./theme/*"],
-      "@/types/*": ["./types/*"]
+      "@/*": ["src/*"]
     },
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],

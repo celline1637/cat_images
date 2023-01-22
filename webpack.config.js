@@ -1,18 +1,10 @@
+const path = require('path');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const tsConfigPath = path.resolve(__dirname, './tsconfig.json');
+
 module.exports = {
-  entry: {
-    dev: './src/index.tsx',
-  },
-  output: {
-    filename: './build/index.js',
-  },
-  devtool: 'source-map',
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx'],
-  },
-  module: {
-    loaders: [
-      // Typescript
-      { test: /\.tsx?$/, loader: 'ts-loader' },
-    ],
+    extensions: ['.ts', '.tsx', '.js'],
+    plugins: [new TsconfigPathsPlugin({ configFile: tsConfigPath })],
   },
 };
