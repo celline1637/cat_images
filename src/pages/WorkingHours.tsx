@@ -1,18 +1,28 @@
 import React, { useState } from 'react';
-import { setOriginalNode } from 'typescript';
+import { useAppSelector, useAppDispatch } from '../hooks/useRedux';
+import { addMeetings, deleteMeeting, toggleShow } from '../redux/workingHourSlice';
 import * as S from './WorkingHours.styles';
 
-const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const DAYS = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+] as const;
+
+export type Days = (typeof DAYS)[number];
 
 function WorkingHours() {
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const isCollapsed = useAppSelector((state) => state.workingHour.isCollapsed);
+  const dispatch = useAppDispatch();
   return (
     <S.Wrapper>
       <S.Title>Working hour</S.Title>
       <S.WeeklyHour>
-        <S.SubTitle onClick={() => setIsCollapsed((prev) => !prev)}>
-          Set your weekly hours
-        </S.SubTitle>
+        <S.SubTitle onClick={() => dispatch(toggleShow())}>Set your weekly hours</S.SubTitle>
         {isCollapsed && DAYS.map((day) => <DaySection key={day} day={day} />)}
         <S.ButtonGroup>
           <button className="sub">Cancel</button>
@@ -25,34 +35,27 @@ function WorkingHours() {
   );
 }
 
-interface Meeting {
-  start: string;
-  end: string;
-}
-
-const INITIAL_VALUE = {
-  start: '09:00',
-  end: '18:00',
+const getTimeList = () => {
+  const time = [];
+  for (let i = 0; i < 24; i++) {
+    for (let j = 0; j <= 45; j += 15) {
+      time.push(`${i.toString().padStart(2, '0')}:${j.toString().padStart(2, '0')}`);
+    }
+  }
+  return time;
 };
 
 const DaySection = ({ day }) => {
-  const [meetings, setMeetings] = useState<Meeting[]>([INITIAL_VALUE]);
-
-  const addMeeting = () => {
-    setMeetings((prev) => [...prev, INITIAL_VALUE]);
-  };
-
-  const deleteMeeting = (deleteIdx: number) => {
-    setMeetings((prev) => prev.filter((_, i) => i !== deleteIdx));
-  };
-
+  const { weeklyMeetings } = useAppSelector((state) => state.workingHour);
+  const dispatch = useAppDispatch();
+  const meetings = weeklyMeetings[day];
   return (
     <S.DaySection>
       <S.Day>{day}</S.Day>
       <S.Meetings>
         {meetings.length === 0 && (
           <S.Meeting>
-            <S.Button onClick={addMeeting}>Add</S.Button>
+            <S.Button onClick={() => dispatch(addMeetings({ day }))}>Add</S.Button>
           </S.Meeting>
         )}
         {meetings.map(({ start, end }, i) => (
@@ -60,8 +63,10 @@ const DaySection = ({ day }) => {
             <TimePicker value={start} />
             <S.Divider>-</S.Divider>
             <TimePicker value={end} />
-            <S.Button onClick={() => deleteMeeting(i)}>Delete</S.Button>
-            {meetings.length === i + 1 && <S.Button onClick={addMeeting}>Add</S.Button>}
+            <S.Button onClick={() => dispatch(deleteMeeting({ day, idx: i }))}>Delete</S.Button>
+            {meetings.length === i + 1 && (
+              <S.Button onClick={() => dispatch(addMeetings({ day }))}>Add</S.Button>
+            )}
           </S.Meeting>
         ))}
       </S.Meetings>
@@ -72,28 +77,12 @@ interface TimePickerProps {
   value: string;
 }
 
-const OPTIONS = [
-  '09:00',
-  '09:15',
-  '09:30',
-  '09:45',
-  '10:00',
-  '09:00',
-  '09:15',
-  '09:30',
-  '09:45',
-  '10:00',
-];
 const TimePicker = ({ value }: TimePickerProps) => {
   const [isClicked, setIsClicked] = useState(false);
   const [time, setTime] = useState(value);
 
   return (
-    <S.TimePickerWrapper
-      onBlur={() => {
-        console.log('blur');
-      }}
-    >
+    <S.TimePickerWrapper>
       <S.TimePicker
         onClick={() => setIsClicked((prev) => !prev)}
         onBlur={() => setIsClicked((prev) => !prev)}
@@ -102,7 +91,7 @@ const TimePicker = ({ value }: TimePickerProps) => {
       </S.TimePicker>
       {isClicked && (
         <S.Options>
-          {OPTIONS.map((time, i) => (
+          {getTimeList().map((time, i) => (
             <button
               key={time + i}
               value={time}
