@@ -20,7 +20,7 @@ const getCatList = async (page: number) => {
   const res = await axios.get('https://api.thecatapi.com/v1/images/search', {
     params: {
       page,
-      limit: 30,
+      limit: 12,
       api_key: 'live_k77YJ1Sa3RsUfqEwbuKzrsevPSBW7iCoeeTZKSuj0ahl51TyYwbMXoLhVwwyIIvF',
     },
   });
@@ -29,20 +29,21 @@ const getCatList = async (page: number) => {
   return {
     items,
     nextPage: page + 1,
-    hasMore: true,
+    hasMore: false,
   };
 };
 
 export const useGetCats = () => {
-  const { data, isLoading, isError, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery<
-    Page,
-    Error
-  >(['cats'], ({ pageParam = 1 }) => getCatList(pageParam), {
-    keepPreviousData: true,
-    getNextPageParam: (lastPage, _pages) => {
-      return lastPage.hasMore ? lastPage.nextPage : undefined;
-    },
-  });
+  const { data, isLoading, fetchNextPage, hasNextPage } = useInfiniteQuery<Page, Error>(
+    ['cats'],
+    ({ pageParam = 1 }) => getCatList(pageParam),
+    {
+      keepPreviousData: true,
+      getNextPageParam: (lastPage, _pages) => {
+        return lastPage.hasMore ? lastPage.nextPage : undefined;
+      },
+    }
+  );
 
   return {
     data: data?.pages.map((page) => page.items).flat(),

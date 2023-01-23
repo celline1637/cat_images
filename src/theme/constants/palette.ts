@@ -8,6 +8,7 @@ export const palette = {
   grey500: '#7A7A7A',
   primary100: '#DBE9FF',
   primary200: '#2C7FFF',
+  red: '#FF0000',
   yellow: '#FFD784',
   pink: '#FFC7CC',
   blue: '#B2E9E3',
