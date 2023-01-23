@@ -17,7 +17,7 @@ export const typography = {
   title: {
     size: 20,
   },
-  subTitle: {
+  subtitle: {
     size: 16,
   },
   body1: {
