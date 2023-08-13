@@ -1,7 +1,3 @@
-# Yess 프론트엔드 과제
-
-#### _FE sunkyung_
-
 ## Installation
 
 - `package.json`이 위치한 폴더에서 `npm install && npm start` 명령을 하면 http://localhost:3000/ 에 리액트 페이지가 실행됩니다.
@@ -41,5 +37,7 @@ state와 theme, type 관련 값들을 각각 나누어 관리하였습니다.
 ## Feature
 
 ### /cat-viewer
+클릭한 이미지 위치를 기준으로 fadeIn&fadeOut되어 미리보기가 나타납니다.
+![고양이 미리보기](https://github.com/celline1637/cat_images/assets/77728308/4ae1a8b7-d5b8-4875-b0ef-9e6db84ee7ee)
 
 ### /working-hour
